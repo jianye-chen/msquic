@@ -117,6 +117,12 @@ if (QUIC_UWP_BUILD OR QUIC_GAMECORE_BUILD)
     set(QUIC_STATIC_LINK_PARTIAL_CRT OFF)
 endif()
 
+if (QUIC_GAMECORE_BUILD)
+    if(${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION} VERSION_LESS "10.0.19041.0")
+        message(ERROR "gamecore builds require Windows 10 SDK version 19041 or later.")
+    endif()
+endif()
+
 if (QUIC_STATIC_LINK_PARTIAL_CRT)
     set(QUIC_STATIC_LINK_CRT ON)
 endif()
