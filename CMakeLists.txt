@@ -825,5 +825,5 @@ endfunction()
 
 if (WIN32 AND NOT QUIC_UWP_BUILD AND NOT QUIC_GAMECORE_BUILD)
     get_all_cmake_targets(all_targets ${CMAKE_CURRENT_LIST_DIR})
-    set_target_properties(${all_targets} PROPERTIES VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION "10.0.17763.0")
+    set_target_properties(${all_targets} PROPERTIES VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION "10.0.18362.0")
 endif()
