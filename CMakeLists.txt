@@ -799,3 +799,31 @@ if(QUIC_BUILD_TEST)
     add_subdirectory(src/test/lib)
     add_subdirectory(src/test/bin)
 endif()
+
+# -----------------------------------------------------------------------------
+# Enumerates the targets in the project and their dependencies, and writes
+# the dependency information to an output file.
+# -----------------------------------------------------------------------------
+function (get_all_cmake_targets out_var current_dir)
+
+    # Get the list of targets in the specified directory that were added by
+    # add_* cmake functions such as add_library, add_executable, or add_custom_target
+    get_property(targets DIRECTORY ${current_dir} PROPERTY BUILDSYSTEM_TARGETS)
+
+    # Note that the SUBDIRECTORIES property gets the list of directories that were
+    # added by add_subdirectory, not all of the subdirectories on the filesystem
+    get_property(subdirs DIRECTORY ${current_dir} PROPERTY SUBDIRECTORIES)
+
+    foreach(subdir ${subdirs})
+        get_all_cmake_targets(subdir_targets ${subdir})
+        list(APPEND targets ${subdir_targets})
+    endforeach()
+
+    set(${out_var} ${targets} PARENT_SCOPE)
+
+endfunction()
+
+if (WIN32 AND NOT QUIC_UWP_BUILD AND NOT QUIC_GAMECORE_BUILD)
+    get_all_cmake_targets(all_targets ${CMAKE_CURRENT_LIST_DIR})
+    set_target_properties(${all_targets} PROPERTIES VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION "10.0.17763.0")
+endif()
